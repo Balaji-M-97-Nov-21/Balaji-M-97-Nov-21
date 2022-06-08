@@ -1,0 +1,58 @@
+package test12.test12;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
+import org.testng.Assert;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+
+import net.bytebuddy.build.Plugin.Factory.UsingReflection.Priority;
+
+public class Second {
+	 public WebDriver driver;
+	@BeforeTest
+	  public  void Openbrowser() {
+	
+	System.setProperty("webdriver.chrome.driver", "E:\\chromedriver_win32 (6)\\chromedriver.exe");
+	driver=new ChromeDriver();
+	driver.manage().window().maximize();
+}
+
+	@Test()
+	public void method1() {
+		//Assert.fail();
+		driver.get("https://www.tsrtconline.in/oprs-web/");
+		
+	}
+		@Test(dependsOnMethods = {"method1"})
+		public void method3()  throws InterruptedException{
+			
+			WebElement from= driver.findElement(By.xpath("//input[@id='matchStartPlace']"));
+			from.sendKeys("Bang");
+			Thread.sleep(3000);
+		
+	}
+		@Test(dependsOnMethods = {"method3"})
+		public void method4() {
+			List<WebElement> list =driver.findElements(By.xpath("//ul[@id='ui-id-1']//li"));
+			System.out.println("number: "+ list.size());
+			for(WebElement el: list) {
+				System.out.println(el.getText()+"***");
+			}
+			
+		
+	}
+@AfterTest
+public void exit() throws InterruptedException {
+	Thread.sleep(5000);
+	driver.quit();
+}
+}
